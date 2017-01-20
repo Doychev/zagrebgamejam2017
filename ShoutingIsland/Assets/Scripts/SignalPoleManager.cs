@@ -13,23 +13,37 @@ public class SignalPoleManager : MonoBehaviour {
     private float timer;
 
     private bool towerActive = false;
+    private bool showRadius = false;
 
     private Vector3 clickPosition;
 
     void Start () {
-        radiusMinScale = radiusVisualization.transform.localScale.x;
-	}
-	
-	void Update () {
-        if (radiusVisualization.activeInHierarchy)
+        radiusVisualization.transform.localScale = new Vector3(radiusMinScale, radiusMinScale);
+        currentScale = radiusMinScale;
+        currentAlpha = 0.0f;
+        fadeRadiusVisualization(10);
+    }
+
+    void fadeRadiusVisualization(int fadeSpeed)
+    {
+        Color color = radiusVisualization.GetComponent<SpriteRenderer>().color;
+        currentAlpha = Mathf.SmoothStep(currentAlpha, 0, Time.deltaTime * fadeSpeed);
+        color.a = currentAlpha;
+        radiusVisualization.GetComponent<SpriteRenderer>().color = color;
+    }
+
+    void Update () {
+
+        if (showRadius)
         {
+            fadeRadiusVisualization(2);
             currentScale = Mathf.SmoothStep(currentScale, radiusMaxScale, Time.deltaTime * 2);
             radiusVisualization.transform.localScale = new Vector3(currentScale, currentScale);
-
-            Color color = radiusVisualization.GetComponent<SpriteRenderer>().color;
-            currentAlpha = Mathf.SmoothStep(currentAlpha, 0, Time.deltaTime * 5);
-            color.a = currentAlpha;
-            radiusVisualization.GetComponent<SpriteRenderer>().color = color;
+        } else
+        {
+            fadeRadiusVisualization(10);
+            currentScale = Mathf.SmoothStep(currentScale, radiusMinScale, Time.deltaTime * 2);
+            radiusVisualization.transform.localScale = new Vector3(currentScale, currentScale);
         }
 
         if (towerActive)
@@ -45,14 +59,13 @@ public class SignalPoleManager : MonoBehaviour {
 
     void OnMouseEnter()
     {
-        radiusVisualization.SetActive(true);
+        showRadius = true;
         currentAlpha = 1.0f;
     }
 
     void OnMouseExit()
     {
-        radiusVisualization.SetActive(false);
-        currentScale = radiusMinScale;
+        showRadius = false;
     }
 
     void OnMouseDown()
