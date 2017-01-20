@@ -16,4 +16,16 @@ public class Human : MonoBehaviour
         this.destination = Random.insideUnitCircle * 5;
         GameObject.FindObjectOfType<CrowdManager>().AddHuman(this);
     }
+
+    public void DoYourShit()
+    {
+        if (((Vector2)this.transform.position - this.destination).sqrMagnitude < 1f)
+        {
+            this.destination = Random.insideUnitCircle * 5;
+        }
+
+        Vector3 goalVector = this.destination - (Vector2)this.transform.position;
+        goalVector = goalVector.normalized * this.velocity;
+        this.preferedVelocity = Vector3.SmoothDamp(this.preferedVelocity, goalVector, ref this.interpolationVel, 2f);
+    }
 }

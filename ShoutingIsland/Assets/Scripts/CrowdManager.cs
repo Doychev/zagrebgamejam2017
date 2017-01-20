@@ -13,6 +13,8 @@ public class CrowdManager : MonoBehaviour {
 
     public Human humanPrefab;
 
+    public ObstacleSetup[] obstacles;
+
     private float lastVelChange;
 
     public void Awake()
@@ -24,7 +26,15 @@ public class CrowdManager : MonoBehaviour {
 
         this.humans = new Dictionary<int, Human>();
 
-        for (int i = 0; i < 100; i++)
+        for(int i = 0; i < this.obstacles.Length; i++)
+        {
+            List<Vector2> vert = new List<Vector2>(this.obstacles[i].vertices);
+            Simulator.Instance.addObstacle(vert);
+        }
+
+        Simulator.Instance.processObstacles();
+
+        for (int i = 0; i < 200; i++)
         {
             Vector2 pos = Random.insideUnitCircle * 5;
             Human h = GameObject.Instantiate<Human>(this.humanPrefab, pos, Quaternion.identity);
@@ -38,6 +48,22 @@ public class CrowdManager : MonoBehaviour {
 
     public void Update()
     {
+
+        for (int i = 0; i < this.obstacles.Length; i++)
+        {
+            for(int n = 0; n < this.obstacles[i].vertices.Length; n++)
+            {
+                if(n == this.obstacles[i].vertices.Length - 1)
+                {
+                    Debug.DrawLine(this.obstacles[i].vertices[n], this.obstacles[i].vertices[0]);
+                }
+                else
+                {
+                    Debug.DrawLine(this.obstacles[i].vertices[n], this.obstacles[i].vertices[n + 1]);
+                }
+            }
+        }
+
         foreach (KeyValuePair<int, Human> kv in this.humans)
         {
             int i = kv.Key;
@@ -45,14 +71,8 @@ public class CrowdManager : MonoBehaviour {
 
             human.transform.position = Simulator.Instance.getAgentPosition(i);
 
-            if(((Vector2) human.transform.position - human.destination).sqrMagnitude < 1f)
-            {
-                human.destination = Random.insideUnitCircle * 5;
-            }
-
-            Vector3 goalVector = human.destination - (Vector2) human.transform.position;
-            goalVector = goalVector.normalized * human.velocity;
-            human.preferedVelocity = Vector3.SmoothDamp(human.preferedVelocity, goalVector, ref human.interpolationVel, 2f);
+            human.DoYourShit();
+            
             Simulator.Instance.setAgentPrefVelocity(i, human.preferedVelocity);
         }
     }
@@ -64,4 +84,10 @@ public class CrowdManager : MonoBehaviour {
         this.humans.Add(i, human);
         this.lastVelChange = Time.time;
     }
+}
+
+[System.Serializable]
+public class ObstacleSetup
+{
+    public Vector2[] vertices;
 }

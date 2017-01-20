@@ -205,16 +205,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46abc46720f1fa9449687253950907b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numWorkers: 32
-  neighborDistance: 2
+  numWorkers: 64
+  neighborDistance: 3
   maxNeighbours: 25
-  timeHorizon: 1
-  timeHorizonObst: 1
-  radius: 0.2
+  timeHorizon: 0.7
+  timeHorizonObst: 0.2
+  radius: 0.13
   maxSpeed: 5
   velocity: {x: 0, y: 0}
   humanPrefab: {fileID: 114160615409910350, guid: 2d0a6be36f8f0004d8638d8a9c0e3061,
     type: 2}
+  obstacles:
+  - vertices:
+    - {x: 0, y: 1}
+    - {x: -2, y: 0}
+    - {x: 2, y: 0}
 --- !u!4 &1025026263
 Transform:
   m_ObjectHideFlags: 0
