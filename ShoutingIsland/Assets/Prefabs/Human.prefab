@@ -53,8 +53,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   directionEffectTimeout: 7
-  velocity: 0
   preferedVelocity: {x: 0, y: 0}
+  isDead: 0
 --- !u!212 &212914349247372094
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -87,6 +87,6 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 3ae8340985322d14182567a93589cda2, type: 3}
-  m_Color: {r: 0.9117647, g: 0.31509513, b: 0.31509513, a: 1}
+  m_Color: {r: 0.8281187, g: 0.10477941, b: 0.83823526, a: 1}
   m_FlipX: 0
   m_FlipY: 0
