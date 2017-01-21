@@ -3,21 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TsunamiManager : MonoBehaviour {
+    public static TsunamiManager Instance
+    {
+        get;
+        private set;
+    }
 
     public float waveWaitTime, warningShowTime;
     public float waveForce;
 
     public GameObject warningPrefab, wavePrefab;
 
-    // Use this for initialization
+    void Awake ()
+    {
+        TsunamiManager.Instance = this;
+    }
+
     void Start () {
         StartCoroutine(LaunchWave());
     }
-
-    // Update is called once per frame
-    void Update () {
-		
-	}
 
     IEnumerator LaunchWave()
     {
@@ -30,9 +34,7 @@ public class TsunamiManager : MonoBehaviour {
             GameObject warning = Instantiate(warningPrefab, spawnPoint, Quaternion.identity, gameObject.transform);
             StartCoroutine(DestroyObject(warning, warningShowTime));
 
-            StartCoroutine(SpawnWave(spawnPoint, warningShowTime));
-            //spawn wave there
-            //move wave
+            StartCoroutine(SpawnWave(spawnPoint, warningShowTime * 2));
 
             yield return new WaitForSeconds(waveWaitTime);
         }
@@ -71,5 +73,15 @@ public class TsunamiManager : MonoBehaviour {
         }
 
         return new Vector3(x, y);
+    }
+
+    public void IncreaseDifficulty()
+    {
+        Debug.Log("waveWaitTime before: " + waveWaitTime);
+        Debug.Log("warningShowTime before: " + warningShowTime);
+        waveWaitTime -= waveWaitTime / 25;
+        warningShowTime -= warningShowTime / 25;
+        Debug.Log("waveWaitTime after: " + waveWaitTime);
+        Debug.Log("warningShowTime after: " + warningShowTime);
     }
 }

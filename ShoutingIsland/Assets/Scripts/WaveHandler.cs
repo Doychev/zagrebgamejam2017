@@ -25,6 +25,6 @@ public class WaveHandler : MonoBehaviour {
             CrowdManager.Instance.KillWithinRange(points, killingRadius);
         }
         Destroy(gameObject);
-        Debug.Log("Still alive: " + CrowdManager.Instance.CountLivingHumans());
+        ScoreManager.Instance.UpdateScore();
     }
 }
