@@ -52,7 +52,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb72b3a5b0c51b84f8d7a4ea68596837, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startVelocity: {x: 0, y: 0}
+  directionEffectTimeout: 15
+  velocity: 0
+  preferedVelocity: {x: 0, y: 0}
 --- !u!212 &212914349247372094
 SpriteRenderer:
   m_ObjectHideFlags: 1

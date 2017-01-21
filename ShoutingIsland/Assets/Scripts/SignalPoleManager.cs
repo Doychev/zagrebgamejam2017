@@ -8,7 +8,7 @@ public class SignalPoleManager : MonoBehaviour {
 
     public float radiusMinScale, radiusMaxScale;
     public float timerMax;
-    
+
     private float currentScale, currentAlpha;
     private float timer;
 
@@ -90,5 +90,6 @@ public class SignalPoleManager : MonoBehaviour {
         timer = timerMax;
         towerActive = true;
         GetComponent<SpriteRenderer>().color = Color.green;
+        CrowdManager.Instance.AddDirectionEffect(transform.position, radiusMaxScale, new Vector2(1, 0).normalized);
     }
 }
