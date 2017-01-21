@@ -18,7 +18,7 @@ public class Human : MonoBehaviour
 
     public void Start()
     {
-        this.velocity = Random.Range(0.9f, 2);
+        this.velocity = Random.Range(0.9f, 1.4f);
         this.preferedVelocity = Random.insideUnitCircle * 2;
         this.destination = Random.insideUnitCircle * 5;
         this.isInDirectionEffect = false;

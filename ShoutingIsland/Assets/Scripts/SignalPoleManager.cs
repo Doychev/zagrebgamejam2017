@@ -5,91 +5,100 @@ using UnityEngine;
 public class SignalPoleManager : MonoBehaviour {
 
     public GameObject radiusVisualization;
+    public GameObject arrowVisualisation;
 
-    public float radiusMinScale, radiusMaxScale;
-    public float timerMax;
-
-    private float currentScale, currentAlpha;
-    private float timer;
+    public float radius;
+    
+    private float startScale, targetScale;
+    private float timeStart;
 
     private bool towerActive = false;
-    private bool showRadius = false;
 
-    private Vector3 clickPosition;
-
-    void Start () {
-        radiusVisualization.transform.localScale = new Vector3(radiusMinScale, radiusMinScale);
-        currentScale = radiusMinScale;
-        currentAlpha = 0.0f;
-        fadeRadiusVisualization(10);
+    private bool _showRadius;
+    private bool showRadius {
+        set
+        {
+            this.radiusVisualization.SetActive(value);
+            this._showRadius = value;
+        }
+        get
+        {
+            return this._showRadius;
+        }
     }
 
-    void fadeRadiusVisualization(int fadeSpeed)
+    private bool _isDragging;
+    private bool isDragging
     {
-        Color color = radiusVisualization.GetComponent<SpriteRenderer>().color;
-        currentAlpha = Mathf.SmoothStep(currentAlpha, 0, Time.deltaTime * fadeSpeed);
-        color.a = currentAlpha;
-        radiusVisualization.GetComponent<SpriteRenderer>().color = color;
+        set
+        {
+            this.arrowVisualisation.SetActive(value);
+            this._isDragging = value;
+        }
+        get
+        {
+            return this._isDragging;
+        }
+    }
+
+    void Start() {
+        this.radiusVisualization.transform.localScale = new Vector3(this.radius * 10, this.radius * 10);
+        this.startScale = this.radius - 0.2f;
+        this.targetScale = this.radius + 0.2f;
+        this.showRadius = false;
     }
 
     void Update () {
+        if(this.showRadius)
+        {
+            float delta = (Time.time - this.timeStart) / 2f;
 
-        if (showRadius)
-        {
-            fadeRadiusVisualization(2);
-            currentScale = Mathf.SmoothStep(currentScale, radiusMaxScale, Time.deltaTime * 2);
-            radiusVisualization.transform.localScale = new Vector3(currentScale, currentScale);
-        } else
-        {
-            fadeRadiusVisualization(10);
-            currentScale = Mathf.SmoothStep(currentScale, radiusMinScale, Time.deltaTime * 2);
-            radiusVisualization.transform.localScale = new Vector3(currentScale, currentScale);
+            if(delta < 1)
+            {
+                this.radius = Mathf.SmoothStep(this.startScale, this.targetScale, delta);
+                this.radiusVisualization.transform.localScale = new Vector3(this.radius * 10, this.radius * 10);
+            }
+            else
+            {
+                float b = this.targetScale;
+                this.targetScale = this.startScale;
+                this.startScale = b;
+                this.timeStart = Time.time;
+            }
         }
 
-        if (towerActive)
+        if(this.isDragging)
         {
-            timer -= Time.deltaTime;
-            if (timer <= 0)
-            {
-                towerActive = false;
-                GetComponent<SpriteRenderer>().color = Color.white;
-            }
+            this.arrowVisualisation.transform.position = this.transform.position;
+            Vector3 diff = this.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            float angle = Mathf.Rad2Deg * Mathf.Atan2(diff.y, diff.x);
+            this.arrowVisualisation.transform.eulerAngles = new Vector3(0, 0, angle + 90);
         }
     }
 
     void OnMouseEnter()
     {
-        showRadius = true;
-        currentAlpha = 1.0f;
+        this.showRadius = true;
     }
 
     void OnMouseExit()
     {
-        showRadius = false;
+        this.showRadius = false;
     }
 
     void OnMouseDown()
     {
-        clickPosition = Input.mousePosition;
-        //Debug.Log("start: " + lastMousePosition);
+        this.isDragging = true;
     }
-
-    //void OnMouseDrag()
-    //{
-    //    Debug.Log("drag: " + Input.mousePosition);
-    //    Vector3 distance = Input.mousePosition - lastMousePosition;
-    //    Debug.Log("distance: " + distance);
-    //}
 
     void OnMouseUp()
     {
-        //Debug.Log("end: " + Input.mousePosition);
-        Vector3 distance = Input.mousePosition - clickPosition;
-        Debug.Log("distance: " + distance);
+        this.isDragging = false;
 
-        timer = timerMax;
+        Vector3 distance = Camera.main.ScreenToWorldPoint(Input.mousePosition) - this.transform.position;
+        
         towerActive = true;
         GetComponent<SpriteRenderer>().color = Color.green;
-        CrowdManager.Instance.AddDirectionEffect(transform.position, radiusMaxScale / 2, distance.normalized);
+        CrowdManager.Instance.AddDirectionEffect(transform.position, this.radius, distance.normalized);
     }
 }
