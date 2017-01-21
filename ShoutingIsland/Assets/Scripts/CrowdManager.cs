@@ -142,6 +142,36 @@ public class CrowdManager : MonoBehaviour {
         }
     }
 
+    public void KillWithinRange(Vector2[] positions, float radius)
+    {
+        foreach (KeyValuePair<int, Human> kv in this.humans)
+        {
+            int i = kv.Key;
+            Human human = kv.Value;
+
+            for (int j = 0; j < positions.Length; j ++)
+            {
+                if (Vector2.Distance(human.transform.position, positions[j]) <= radius)
+                {
+                    human.Die();
+                }
+            }
+        }
+    }
+
+    public int CountLivingHumans()
+    {
+        int result = 0;
+        foreach (KeyValuePair<int, Human> kv in this.humans)
+        {
+            int i = kv.Key;
+            Human human = kv.Value;
+
+            if (!human.isDead) result++;
+        }
+        return result;
+    }
+
     [ContextMenu("Grab points from collider")]
     public void GrabPoints()
     {

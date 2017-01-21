@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class WaveHandler : MonoBehaviour {
 
+    public float killingRadius;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -19,14 +21,10 @@ public class WaveHandler : MonoBehaviour {
         for (int i = 0; i < coll.contacts.Length; i++)
         {
             Vector2 diff = Quaternion.Euler(0, 0, 90) * coll.contacts[i].normal;
-            //coll.contacts[i].point + coll.contacts[i]
-            Debug.Log(coll.contacts[i].normal);
-            Debug.Log(coll.contacts[i].point - diff);
-            Debug.Log(coll.contacts[i].point);
-            Debug.Log(coll.contacts[i].point + diff);
-
-            Debug.DrawLine(coll.contacts[i].point - diff, coll.contacts[i].point + diff, Color.green);
+            Vector2[] points = { coll.contacts[i].point - diff, coll.contacts[i].point, coll.contacts[i].point + diff };
+            CrowdManager.Instance.KillWithinRange(points, killingRadius);
         }
         Destroy(gameObject);
+        Debug.Log("Still alive: " + CrowdManager.Instance.CountLivingHumans());
     }
 }
