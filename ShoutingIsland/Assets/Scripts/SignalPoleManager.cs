@@ -90,6 +90,6 @@ public class SignalPoleManager : MonoBehaviour {
         timer = timerMax;
         towerActive = true;
         GetComponent<SpriteRenderer>().color = Color.green;
-        CrowdManager.Instance.AddDirectionEffect(transform.position, radiusMaxScale, new Vector2(1, 0).normalized);
+        CrowdManager.Instance.AddDirectionEffect(transform.position, radiusMaxScale / 2, distance.normalized);
     }
 }

@@ -42,7 +42,7 @@ public class CrowdManager : MonoBehaviour {
 
         Simulator.Instance.processObstacles();
 
-        for (int i = 0; i < 200; i++)
+        for (int i = 0; i < 50; i++)
         {
             Vector2 pos = Random.insideUnitCircle * 5;
             Human h = GameObject.Instantiate<Human>(this.humanPrefab, pos, Quaternion.identity);
@@ -106,7 +106,7 @@ public class CrowdManager : MonoBehaviour {
             int i = kv.Key;
             Human human = kv.Value;
 
-            if(Vector2.Distance(human.transform.position, position) <= radius)
+            if (Vector2.Distance(human.transform.position, position) <= radius)
             {
                 human.GoInDirection(direction);
             }

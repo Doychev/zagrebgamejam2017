@@ -21,6 +21,7 @@ public class Human : MonoBehaviour
         this.velocity = Random.Range(1, 2);
         this.preferedVelocity = Random.insideUnitCircle * 2;
         this.destination = Random.insideUnitCircle * 5;
+        this.isInDirectionEffect = false;
         CrowdManager.Instance.AddHuman(this);
     }
 
@@ -34,7 +35,7 @@ public class Human : MonoBehaviour
             {
                 this.isInDirectionEffect = false;
             }
-
+            
             goalVector = this.directionEffectVector;
         }
         else
@@ -53,11 +54,7 @@ public class Human : MonoBehaviour
 
     public void GoInDirection(Vector2 direction)
     {
-        if(this.isInDirectionEffect)
-        {
-            return;
-        }
-
+        this.isInDirectionEffect = true;
         this.directionEffectStartTime = Time.time;
         this.directionEffectVector = direction * this.velocity;
     }
