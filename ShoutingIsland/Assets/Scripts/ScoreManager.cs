@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour {
@@ -11,6 +12,7 @@ public class ScoreManager : MonoBehaviour {
     }
 
     public Text scoreText, peopleText;
+    public GameObject gameOverPanel;
 
     private int currentScore = 0;
 
@@ -25,6 +27,43 @@ public class ScoreManager : MonoBehaviour {
         scoreText.text = "Score: " + currentScore;
         peopleText.text = "Alive: " + livingPeople;
 
-        TsunamiManager.Instance.IncreaseDifficulty();
+        if (livingPeople > 0)
+        {
+            TsunamiManager.Instance.IncreaseDifficulty();
+        } else
+        {
+            StartCoroutine(EndGame());
+        }
+    }
+
+    IEnumerator EndGame()
+    {
+        int iterations = 10;
+        for (int i = 0; i < iterations; i ++)
+        {
+            Time.timeScale -= 0.99f / iterations;
+            yield return StartCoroutine(WaitForRealTime(0.75f / iterations));
+        }
+        Time.timeScale = 0.01f;
+        gameOverPanel.SetActive(true);
+    }
+
+    public void Restart()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("PlaygroundScene");
+    }
+
+    public static IEnumerator WaitForRealTime(float delay)
+    {
+        while (true)
+        {
+            float pauseEndTime = Time.realtimeSinceStartup + delay;
+            while (Time.realtimeSinceStartup < pauseEndTime)
+            {
+                yield return 0;
+            }
+            break;
+        }
     }
 }
