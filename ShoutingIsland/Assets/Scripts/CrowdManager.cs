@@ -154,6 +154,8 @@ public class CrowdManager : MonoBehaviour {
                 if (Vector2.Distance(human.transform.position, positions[j]) <= radius)
                 {
                     human.Die();
+                    Simulator.Instance.setAgentPrefVelocity(i, Vector2.zero);
+                    this.humans.Remove(i);
                 }
             }
         }
@@ -161,15 +163,7 @@ public class CrowdManager : MonoBehaviour {
 
     public int CountLivingHumans()
     {
-        int result = 0;
-        foreach (KeyValuePair<int, Human> kv in this.humans)
-        {
-            int i = kv.Key;
-            Human human = kv.Value;
-
-            if (!human.isDead) result++;
-        }
-        return result;
+        return this.humans.Count;
     }
 
     [ContextMenu("Grab points from collider")]

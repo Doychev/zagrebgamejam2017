@@ -22,9 +22,10 @@ public class Human : MonoBehaviour
     public void Start()
     {
         this.directionEffectTimeout += Random.Range(-1f, 2f);
-        this.velocity = Random.Range(1f, 2f);
+        this.velocity = Random.Range(0.5f, 1f);
         this.preferedVelocity = Random.insideUnitCircle * 2;
-        this.destination = Random.insideUnitCircle * 5;
+        this.transform.position = this.generateDestination();
+        this.destination = this.generateDestination();
         this.isInDirectionEffect = false;
         this.isDead = false;
         CrowdManager.Instance.AddHuman(this);
@@ -34,19 +35,12 @@ public class Human : MonoBehaviour
     {
         Vector3 goalVector;
 
-        if (isDead)
-        {
-            this.velocity = 0f;
-            this.preferedVelocity = Vector2.zero;
-            this.destination = this.transform.position;
-            return;
-        }
-
         if (this.isInDirectionEffect)
         {
             if(Time.time - this.directionEffectStartTime > this.directionEffectTimeout)
             {
                 this.isInDirectionEffect = false;
+                this.destination = this.generateDestination();
             }
             
             goalVector = this.directionEffectVector * this.velocity;
@@ -83,8 +77,8 @@ public class Human : MonoBehaviour
         Vector2 dest;
         do
         {
-            dest = Random.insideUnitCircle * 5;
-        } while (!this.isDestinationAllowed(dest));
+            dest = Random.insideUnitCircle * 4;
+        } while (!this.isDestinationAllowed(dest) || Vector2.Distance(this.transform.position, dest) < 1.5f);
 
         return dest;
     }
