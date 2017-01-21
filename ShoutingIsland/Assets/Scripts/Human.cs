@@ -75,6 +75,7 @@ public class Human : MonoBehaviour
     public void Die()
     {
         this.isDead = true;
+        GetComponent<SpriteRenderer>().color = Color.blue;
     }
 
     private Vector2 generateDestination()
