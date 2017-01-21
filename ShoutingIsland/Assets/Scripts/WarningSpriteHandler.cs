@@ -14,5 +14,10 @@ public class WarningSpriteHandler : MonoBehaviour {
         Color color = GetComponent<SpriteRenderer>().color;
         color.a -= 0.015f;
         GetComponent<SpriteRenderer>().color = color;
+
+        if (color.a < 0.01f)
+        {
+            Destroy(gameObject);
+        }
 	}
 }
