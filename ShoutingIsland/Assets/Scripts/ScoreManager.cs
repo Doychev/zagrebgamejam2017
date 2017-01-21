@@ -41,7 +41,13 @@ public class ScoreManager : MonoBehaviour {
         int iterations = 10;
         for (int i = 0; i < iterations; i ++)
         {
-            Time.timeScale -= 0.99f / iterations;
+            float timeScale = Time.timeScale;
+            timeScale -= 0.99f / iterations;
+            if (timeScale < 0)
+            {
+                timeScale = 0;
+            }
+            Time.timeScale = timeScale;
             yield return StartCoroutine(WaitForRealTime(0.75f / iterations));
         }
         Time.timeScale = 0.01f;
