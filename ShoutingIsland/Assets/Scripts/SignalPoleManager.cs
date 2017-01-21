@@ -107,7 +107,7 @@ public class SignalPoleManager : MonoBehaviour {
     {
         while (Time.time - signalTimerStart < 5f)
         {
-            CrowdManager.Instance.AddDirectionEffect(transform.position, this.radius, signalVector.normalized);
+            CrowdManager.Instance.AddDirectionEffect(transform.position, this.radius, signalVector);
             yield return new WaitForSeconds(1.0f);
         }
         GetComponent<SpriteRenderer>().color = Color.white;

@@ -43,7 +43,7 @@ public class Human : MonoBehaviour
                 this.destination = this.generateDestination();
             }
             
-            goalVector = this.directionEffectVector * this.velocity;
+            goalVector = this.directionEffectVector;
         }
         else
         {
@@ -63,7 +63,7 @@ public class Human : MonoBehaviour
     {
         this.isInDirectionEffect = true;
         this.directionEffectStartTime = Time.time;
-        this.directionEffectVector = Quaternion.Euler(0, Random.Range(-20f, 20f), 0) * direction * this.velocity;
+        this.directionEffectVector = Quaternion.Euler(0, 0, Random.Range(-20f, 20f)) * direction.normalized * this.velocity; // 
     }
 
     public void Die()

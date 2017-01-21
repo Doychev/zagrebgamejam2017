@@ -144,6 +144,8 @@ public class CrowdManager : MonoBehaviour {
 
     public void KillWithinRange(Vector2[] positions, float radius)
     {
+        List<int> toRemoveIDs = new List<int>();
+
         foreach (KeyValuePair<int, Human> kv in this.humans)
         {
             int i = kv.Key;
@@ -155,9 +157,14 @@ public class CrowdManager : MonoBehaviour {
                 {
                     human.Die();
                     Simulator.Instance.setAgentPrefVelocity(i, Vector2.zero);
-                    this.humans.Remove(i);
+                    toRemoveIDs.Add(i);
                 }
             }
+        }
+
+        for(int i = 0; i < toRemoveIDs.Count; i++)
+        {
+            this.humans.Remove(toRemoveIDs[i]);
         }
     }
 

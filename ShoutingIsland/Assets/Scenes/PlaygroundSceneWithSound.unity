@@ -114,7 +114,7 @@ SpriteRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 64574703}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_MotionVectors: 1
@@ -190,7 +190,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &168565352
 Transform:
   m_ObjectHideFlags: 0
@@ -334,7 +334,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_BackGroundColor: {r: 0.7794118, g: 0.7794118, b: 0.7794118, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -422,7 +422,7 @@ Prefab:
       objectReference: {fileID: 1916626683}
     - target: {fileID: 1332733769281660, guid: ee960a1e7c36e2d4bb93c688ca2739d8, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ee960a1e7c36e2d4bb93c688ca2739d8, type: 2}
@@ -477,7 +477,7 @@ Prefab:
       objectReference: {fileID: 1916626683}
     - target: {fileID: 1332733769281660, guid: ee960a1e7c36e2d4bb93c688ca2739d8, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ee960a1e7c36e2d4bb93c688ca2739d8, type: 2}
@@ -534,7 +534,7 @@ Prefab:
       objectReference: {fileID: 1916626683}
     - target: {fileID: 1332733769281660, guid: ee960a1e7c36e2d4bb93c688ca2739d8, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ee960a1e7c36e2d4bb93c688ca2739d8, type: 2}
@@ -589,7 +589,7 @@ Prefab:
       objectReference: {fileID: 1916626683}
     - target: {fileID: 1332733769281660, guid: ee960a1e7c36e2d4bb93c688ca2739d8, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ee960a1e7c36e2d4bb93c688ca2739d8, type: 2}
@@ -732,7 +732,7 @@ Prefab:
       objectReference: {fileID: 1916626683}
     - target: {fileID: 1332733769281660, guid: ee960a1e7c36e2d4bb93c688ca2739d8, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ee960a1e7c36e2d4bb93c688ca2739d8, type: 2}
