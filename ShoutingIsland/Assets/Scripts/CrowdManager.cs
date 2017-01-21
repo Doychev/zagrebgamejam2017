@@ -21,6 +21,9 @@ public class CrowdManager : MonoBehaviour {
 
     public ObstacleSetup[] obstacles;
 
+    public bool reverseIsland;
+    public ObstacleSetup islandObstacle;
+
     private float lastVelChange;
 
     public void Awake()
@@ -34,7 +37,22 @@ public class CrowdManager : MonoBehaviour {
 
         this.humans = new Dictionary<int, Human>();
 
-        for(int i = 0; i < this.obstacles.Length; i++)
+        if(this.reverseIsland)
+        {
+            Vector2[] verts = new Vector2[this.islandObstacle.vertices.Length];
+            int z = 0;
+            for (int i = this.islandObstacle.vertices.Length - 1; i >= 0; i--)
+            {
+                verts[z++] = this.islandObstacle.vertices[i];
+            }
+            Simulator.Instance.addObstacle(new List<Vector2>(verts));
+        }
+        else
+        {
+            Simulator.Instance.addObstacle(new List<Vector2>(this.islandObstacle.vertices));
+        }
+
+        for (int i = 0; i < this.obstacles.Length; i++)
         {
             List<Vector2> vert = new List<Vector2>(this.obstacles[i].vertices);
             Simulator.Instance.addObstacle(vert);
@@ -56,6 +74,17 @@ public class CrowdManager : MonoBehaviour {
 
     public void Update()
     {
+        for (int n = 0; n < this.islandObstacle.vertices.Length; n++)
+        {
+            if (n == this.islandObstacle.vertices.Length - 1)
+            {
+                Debug.DrawLine(this.islandObstacle.vertices[n], this.islandObstacle.vertices[0], Color.red);
+            }
+            else
+            {
+                Debug.DrawLine(this.islandObstacle.vertices[n], this.islandObstacle.vertices[n + 1], Color.red);
+            }
+        }
 
         for (int i = 0; i < this.obstacles.Length; i++)
         {
@@ -111,6 +140,20 @@ public class CrowdManager : MonoBehaviour {
                 human.GoInDirection(direction);
             }
         }
+    }
+
+    [ContextMenu("Grab points from collider")]
+    public void GrabPoints()
+    {
+        PolygonCollider2D coll = this.GetComponent<PolygonCollider2D>();
+        if(coll == null)
+        {
+            return;
+        }
+
+        this.islandObstacle = new ObstacleSetup();
+        this.islandObstacle.vertices = coll.GetPath(0);
+        GameObject.DestroyImmediate(coll);
     }
 }
 
