@@ -12,7 +12,8 @@ public class SignalPoleManager : MonoBehaviour {
     private float startScale, targetScale;
     private float timeStart;
 
-    private bool towerActive = false;
+    private float signalTimerStart;
+    private Vector3 signalVector;
 
     private bool _showRadius;
     private bool showRadius {
@@ -95,10 +96,20 @@ public class SignalPoleManager : MonoBehaviour {
     {
         this.isDragging = false;
 
-        Vector3 distance = Camera.main.ScreenToWorldPoint(Input.mousePosition) - this.transform.position;
+        signalVector = Camera.main.ScreenToWorldPoint(Input.mousePosition) - this.transform.position;
         
-        towerActive = true;
         GetComponent<SpriteRenderer>().color = Color.green;
-        CrowdManager.Instance.AddDirectionEffect(transform.position, this.radius, distance.normalized);
+        signalTimerStart = Time.time;
+        StartCoroutine(SendSignal());
+    }
+
+    IEnumerator SendSignal()
+    {
+        while (Time.time - signalTimerStart < 5f)
+        {
+            CrowdManager.Instance.AddDirectionEffect(transform.position, this.radius, signalVector.normalized);
+            yield return new WaitForSeconds(1.0f);
+        }
+        GetComponent<SpriteRenderer>().color = Color.white;
     }
 }
