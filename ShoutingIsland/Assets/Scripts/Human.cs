@@ -18,7 +18,8 @@ public class Human : MonoBehaviour
 
     public void Start()
     {
-        this.velocity = Random.Range(0.9f, 1.4f);
+        this.directionEffectTimeout += Random.Range(-1f, 2f);
+        this.velocity = Random.Range(1f, 2f);
         this.preferedVelocity = Random.insideUnitCircle * 2;
         this.destination = Random.insideUnitCircle * 5;
         this.isInDirectionEffect = false;
@@ -36,7 +37,7 @@ public class Human : MonoBehaviour
                 this.isInDirectionEffect = false;
             }
             
-            goalVector = this.directionEffectVector;
+            goalVector = this.directionEffectVector * this.velocity;
         }
         else
         {
@@ -49,7 +50,7 @@ public class Human : MonoBehaviour
             goalVector = goalVector.normalized * this.velocity;
         }
 
-        this.preferedVelocity = Vector3.SmoothDamp(this.preferedVelocity, goalVector, ref this.interpolationVel, 2f);
+        this.preferedVelocity = Vector3.SmoothDamp(this.preferedVelocity, goalVector, ref this.interpolationVel, 0.3f);
     }
 
     public void GoInDirection(Vector2 direction)
