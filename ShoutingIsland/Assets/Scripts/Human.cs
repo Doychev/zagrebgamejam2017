@@ -5,9 +5,11 @@ public class Human : MonoBehaviour
     public float directionEffectTimeout;
 
     [HideInInspector]
-    public float velocity;
-    [HideInInspector]
     public Vector2 preferedVelocity;
+    [HideInInspector]
+    public bool isDead;
+
+    private float speed, effectSpeed;
     
     private Vector2 destination;
     private Vector3 interpolationVel;
@@ -16,8 +18,6 @@ public class Human : MonoBehaviour
     private float directionEffectStartTime;
     private Vector2 directionEffectVector;
 
-    [HideInInspector]
-    public bool isDead;
 
     private int currentWaypoint;
     private WalkingType walkingType;
@@ -28,12 +28,15 @@ public class Human : MonoBehaviour
         this.walkingType = this.generateRandomType();
 
         this.directionEffectTimeout += Random.Range(-1f, 2f);
-        this.velocity = Random.Range(0.5f, 1f);
         this.preferedVelocity = Random.insideUnitCircle * 2;
         this.transform.position = this.generateDestination();
         this.destination = this.generateDestination();
         this.isInDirectionEffect = false;
         this.isDead = false;
+
+        this.speed = Random.Range(0.4f, 0.7f);
+        this.effectSpeed = Random.Range(0.8f, 1f);
+
         CrowdManager.Instance.AddHuman(this);
     }
 
@@ -59,7 +62,7 @@ public class Human : MonoBehaviour
             }
 
             goalVector = this.destination - (Vector2)this.transform.position;
-            goalVector = goalVector.normalized * this.velocity;
+            goalVector = goalVector.normalized * this.speed;
         }
 
         this.preferedVelocity = Vector3.SmoothDamp(this.preferedVelocity, goalVector, ref this.interpolationVel, 0.3f);
@@ -69,7 +72,7 @@ public class Human : MonoBehaviour
     {
         this.isInDirectionEffect = true;
         this.directionEffectStartTime = Time.time;
-        this.directionEffectVector = Quaternion.Euler(0, 0, Random.Range(-20f, 20f)) * direction.normalized * this.velocity;
+        this.directionEffectVector = Quaternion.Euler(0, 0, Random.Range(-20f, 20f)) * direction.normalized * this.effectSpeed;
     }
 
     public void Die()
@@ -157,7 +160,7 @@ public class Human : MonoBehaviour
 
     private bool isDestinationAllowed(Vector2 dest)
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(dest, 0.2f, LayerMask.GetMask("Island", "Obstacle"));
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(dest, 0.3f, LayerMask.GetMask("Island", "Obstacle"));
 
         bool allowed = false;
         for (int i = 0; i < colliders.Length; i++)
