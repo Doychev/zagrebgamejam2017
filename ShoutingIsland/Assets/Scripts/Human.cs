@@ -19,8 +19,14 @@ public class Human : MonoBehaviour
     [HideInInspector]
     public bool isDead;
 
+    private int currentWaypoint;
+    private WalkingType walkingType;
+
     public void Start()
     {
+        this.currentWaypoint = (int)Random.Range(0, CrowdManager.Instance.waypoints.Length - 0.001f);
+        this.walkingType = this.generateRandomType();
+
         this.directionEffectTimeout += Random.Range(-1f, 2f);
         this.velocity = Random.Range(0.5f, 1f);
         this.preferedVelocity = Random.insideUnitCircle * 2;
@@ -63,7 +69,7 @@ public class Human : MonoBehaviour
     {
         this.isInDirectionEffect = true;
         this.directionEffectStartTime = Time.time;
-        this.directionEffectVector = Quaternion.Euler(0, 0, Random.Range(-20f, 20f)) * direction.normalized * this.velocity; // 
+        this.directionEffectVector = Quaternion.Euler(0, 0, Random.Range(-20f, 20f)) * direction.normalized * this.velocity;
     }
 
     public void Die()
@@ -74,13 +80,79 @@ public class Human : MonoBehaviour
 
     private Vector2 generateDestination()
     {
+        if(Random.value > 0.85f)
+        {
+            this.walkingType = this.generateRandomType();
+        }
+
         Vector2 dest;
         do
         {
-            dest = Random.insideUnitCircle * 4;
-        } while (!this.isDestinationAllowed(dest) || Vector2.Distance(this.transform.position, dest) < 1.5f);
+            dest = this.calculateNextDesitnation();
+        } while (!this.isDestinationAllowed(dest));
 
         return dest;
+    }
+
+    private Vector2 calculateNextDesitnation()
+    {
+        Vector2 rand = Random.onUnitSphere;
+
+        if (this.walkingType == WalkingType.random)
+        {
+            return rand * 4;
+        }
+        else if(this.walkingType == WalkingType.waypointRandom)
+        {
+            Vector2 waypoint = CrowdManager.Instance.waypoints[(int)Random.Range(0, CrowdManager.Instance.waypoints.Length - 0.001f)];
+            return waypoint + rand * 0.75f;
+        }
+        else if(this.walkingType == WalkingType.waypoint)
+        {
+            this.currentWaypoint++;
+            if(this.currentWaypoint >= CrowdManager.Instance.waypoints.Length)
+            {
+                this.currentWaypoint = 0;
+            }
+
+            return CrowdManager.Instance.waypoints[this.currentWaypoint] + rand * 0.75f;
+        }
+        else if(this.walkingType == WalkingType.waypointOpposite)
+        {
+            this.currentWaypoint--;
+            if(this.currentWaypoint < 0)
+            {
+                this.currentWaypoint = CrowdManager.Instance.waypoints.Length - 1;
+            }
+
+            return CrowdManager.Instance.waypoints[this.currentWaypoint] + rand * 0.75f;
+        }
+        else
+        {
+            return rand;
+        }
+    }
+
+    private WalkingType generateRandomType()
+    {
+        float chance = Random.value;
+
+        if(chance < 0.1f)
+        {
+            return WalkingType.random;
+        }
+        else if(chance < 0.3f)
+        {
+            return WalkingType.waypointRandom;
+        }
+        else if(chance < 0.65f)
+        {
+            return WalkingType.waypoint;
+        }
+        else
+        {
+            return WalkingType.waypointOpposite;
+        }
     }
 
     private bool isDestinationAllowed(Vector2 dest)
@@ -102,4 +174,9 @@ public class Human : MonoBehaviour
 
         return allowed;
     }
+}
+
+public enum WalkingType
+{
+    waypoint, waypointOpposite, waypointRandom, random
 }
