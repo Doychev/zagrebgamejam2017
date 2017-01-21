@@ -18,7 +18,7 @@ public class Human : MonoBehaviour
 
     public void Start()
     {
-        this.velocity = Random.Range(1, 2);
+        this.velocity = Random.Range(0.9f, 2);
         this.preferedVelocity = Random.insideUnitCircle * 2;
         this.destination = Random.insideUnitCircle * 5;
         this.isInDirectionEffect = false;
@@ -56,6 +56,6 @@ public class Human : MonoBehaviour
     {
         this.isInDirectionEffect = true;
         this.directionEffectStartTime = Time.time;
-        this.directionEffectVector = direction * this.velocity;
+        this.directionEffectVector = Quaternion.Euler(0, Random.Range(-20f, 20f), 0) * direction * this.velocity;
     }
 }
