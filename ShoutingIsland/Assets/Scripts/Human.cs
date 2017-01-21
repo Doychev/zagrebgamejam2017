@@ -43,7 +43,7 @@ public class Human : MonoBehaviour
         {
             if (((Vector2)this.transform.position - this.destination).sqrMagnitude < 1f)
             {
-                this.destination = Random.insideUnitCircle * 5;
+                this.destination = this.generateDestination();
             }
 
             goalVector = this.destination - (Vector2)this.transform.position;
@@ -58,5 +58,36 @@ public class Human : MonoBehaviour
         this.isInDirectionEffect = true;
         this.directionEffectStartTime = Time.time;
         this.directionEffectVector = Quaternion.Euler(0, Random.Range(-20f, 20f), 0) * direction * this.velocity;
+    }
+
+    private Vector2 generateDestination()
+    {
+        Vector2 dest;
+        do
+        {
+            dest = Random.insideUnitCircle * 5;
+        } while (!this.isDestinationAllowed(dest));
+
+        return dest;
+    }
+
+    private bool isDestinationAllowed(Vector2 dest)
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(dest, 0.2f, LayerMask.GetMask("Island", "Obstacle"));
+
+        bool allowed = false;
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            if(colliders[i].gameObject.layer == LayerMask.NameToLayer("Obstacle"))
+            {
+                return false;
+            }
+            else if(colliders[i].gameObject.layer == LayerMask.NameToLayer("Island"))
+            {
+                allowed = true;
+            }
+        }
+
+        return allowed;
     }
 }

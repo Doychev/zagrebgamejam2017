@@ -18,7 +18,7 @@ public class WaveHandler : MonoBehaviour {
     {
         for (int i = 0; i < coll.contacts.Length; i++)
         {
-            Vector2 diff = Quaternion.AngleAxis(90, Vector3.up) * coll.contacts[i].normal * 2;
+            Vector2 diff = Quaternion.Euler(0, 0, 90) * coll.contacts[i].normal;
             //coll.contacts[i].point + coll.contacts[i]
             Debug.Log(coll.contacts[i].normal);
             Debug.Log(coll.contacts[i].point - diff);

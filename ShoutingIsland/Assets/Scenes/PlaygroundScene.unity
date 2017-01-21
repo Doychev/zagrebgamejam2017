@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 64574705}
   - component: {fileID: 64574704}
   - component: {fileID: 64574706}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: best_island_ever
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -611,15 +611,19 @@ MonoBehaviour:
   timeHorizon: 0.5
   timeHorizonObst: 1
   radius: 0.13
-  maxSpeed: 5
+  maxSpeed: 3
   velocity: {x: 0, y: 0}
   humanPrefab: {fileID: 114160615409910350, guid: 2d0a6be36f8f0004d8638d8a9c0e3061,
     type: 2}
   obstacles:
   - vertices:
     - {x: 0, y: 1}
-    - {x: -2, y: 0}
-    - {x: 2, y: 0}
+    - {x: -1, y: 0}
+    - {x: 1, y: 0}
+  - vertices:
+    - {x: 2, y: 2.5}
+    - {x: 1.5, y: 2}
+    - {x: 2.5, y: 2}
   reverseIsland: 0
   islandObstacle:
     vertices:
