@@ -86,7 +86,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Size: {x: 0.16, y: 0.16}
+  m_Size: {x: 0.4, y: 0.4}
 --- !u!82 &82353480971912374
 AudioSource:
   m_ObjectHideFlags: 1

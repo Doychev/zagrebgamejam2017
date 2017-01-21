@@ -11,8 +11,7 @@ public class SignalPoleManager : MonoBehaviour {
     
     private float startScale, targetScale;
     private float timeStart;
-
-    private float signalTimerStart;
+    
     private Vector3 signalVector;
 
     private bool _showRadius;
@@ -42,11 +41,18 @@ public class SignalPoleManager : MonoBehaviour {
         }
     }
 
+    private AudioSource audioSource;
+    private AudioClip clip;
+    private bool recordingAudio;
+    private int readHead;
+
     void Start() {
         this.radiusVisualization.transform.localScale = new Vector3(this.radius * 10, this.radius * 10);
         this.startScale = this.radius - 0.2f;
         this.targetScale = this.radius + 0.2f;
         this.showRadius = false;
+
+        this.audioSource = this.GetComponent<AudioSource>();
     }
 
     void Update () {
@@ -75,7 +81,34 @@ public class SignalPoleManager : MonoBehaviour {
             float angle = Mathf.Rad2Deg * Mathf.Atan2(diff.y, diff.x);
             this.arrowVisualisation.transform.eulerAngles = new Vector3(0, 0, angle + 90);
         }
+
+        if(this.recordingAudio && !Microphone.IsRecording(null))
+        {
+            this.recordingAudio = false;
+            StartCoroutine(SignalGenerator());
+        }
     }
+
+   /* void FlushToListeners()
+    {
+        int writeHead = Microphone.GetPosition(null);
+
+        // Say audio.clip.samples (S)  = 100
+        // if w=1, r=0, we want 1 sample.  ( S + 1 - 0 ) % S = 1 YES
+        // if w=0, r=99, we want 1 sample.  ( S + 0 - 99 ) % S = 1 YES
+        int nFloatsToGet = (this.audioSource.clip.samples + writeHead - readHead) % this.audioSource.clip.samples;
+
+        float[] B = new float[nFloatsToGet];
+
+        // If the read length from the offset is longer than the clip length,
+        //   the read will wrap around and read the remaining samples
+        //   from the start of the clip.
+        this.audioSource.clip.GetData(B, readHead);
+
+        // !!! Send B to listeners
+
+        readHead = (readHead + nFloatsToGet) % audio.clip.samples;
+    }*/
 
     void OnMouseEnter()
     {
@@ -96,20 +129,39 @@ public class SignalPoleManager : MonoBehaviour {
     {
         this.isDragging = false;
 
-        signalVector = Camera.main.ScreenToWorldPoint(Input.mousePosition) - this.transform.position;
+        this.signalVector = Camera.main.ScreenToWorldPoint(Input.mousePosition) - this.transform.position;
         
-        GetComponent<SpriteRenderer>().color = Color.green;
-        signalTimerStart = Time.time;
-        StartCoroutine(SendSignal());
+        this.StartCoroutine(this.recordAudio());
     }
 
-    IEnumerator SendSignal()
+    IEnumerator SignalGenerator()
     {
-        while (Time.time - signalTimerStart < 5f)
+        GetComponent<SpriteRenderer>().color = Color.green;
+        float signalTimerStart = Time.time;
+
+        while (Time.time - signalTimerStart < 8f)
         {
-            CrowdManager.Instance.AddDirectionEffect(transform.position, this.radius, signalVector);
-            yield return new WaitForSeconds(1.0f);
+            this.SendSignal();
+            yield return new WaitForSeconds(2.5f);
         }
         GetComponent<SpriteRenderer>().color = Color.white;
+    }
+
+    private IEnumerator recordAudio()
+    {
+        yield return new WaitForEndOfFrame();
+        this.recordingAudio = true;
+        this.audioSource.clip = Microphone.Start(null, false, 2, 44100);
+        while (Microphone.GetPosition(null) < 0f) { }
+    }
+
+    private void SendSignal()
+    {
+        if(this.audioSource.clip != null)
+        {
+            this.audioSource.Play();
+        }
+
+        CrowdManager.Instance.AddDirectionEffect(transform.position, this.radius, signalVector);
     }
 }
