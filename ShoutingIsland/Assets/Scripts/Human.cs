@@ -14,7 +14,7 @@ public class Human : MonoBehaviour
         this.velocity = Random.Range(1, 2);
         this.preferedVelocity = Random.insideUnitCircle * 2;
         this.destination = Random.insideUnitCircle * 5;
-        GameObject.FindObjectOfType<CrowdManager>().AddHuman(this);
+        CrowdManager.Instance.AddHuman(this);
     }
 
     public void DoYourShit()
@@ -27,5 +27,10 @@ public class Human : MonoBehaviour
         Vector3 goalVector = this.destination - (Vector2)this.transform.position;
         goalVector = goalVector.normalized * this.velocity;
         this.preferedVelocity = Vector3.SmoothDamp(this.preferedVelocity, goalVector, ref this.interpolationVel, 2f);
+    }
+
+    public void GoInDirection(Vector2 direction)
+    {
+
     }
 }

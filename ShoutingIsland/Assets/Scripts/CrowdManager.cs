@@ -3,6 +3,12 @@ using RVO;
 using System.Collections.Generic;
 
 public class CrowdManager : MonoBehaviour {
+    public static CrowdManager Instance
+    {
+        get;
+        private set;
+    }
+
     public int numWorkers;
     public float neighborDistance;
     public int maxNeighbours;
@@ -19,6 +25,8 @@ public class CrowdManager : MonoBehaviour {
 
     public void Awake()
     {
+        CrowdManager.Instance = this;
+
         Simulator.Instance.setTimeStep(Time.fixedDeltaTime);
         Simulator.Instance.SetNumWorkers(this.numWorkers);
         Simulator.Instance.setAgentDefaults(this.neighborDistance, this.maxNeighbours,
@@ -83,6 +91,26 @@ public class CrowdManager : MonoBehaviour {
         Simulator.Instance.setAgentPrefVelocity(i, human.preferedVelocity);
         this.humans.Add(i, human);
         this.lastVelChange = Time.time;
+    }
+
+    /// <summary>
+    /// Give all actors in radius around central position a command to move in certain direction.
+    /// </summary>
+    /// <param name="position">Central position of effect.</param>
+    /// <param name="radius">Radius of effect.</param>
+    /// <param name="direction">Direct of movement. Has to be normalized.</param>
+    public void AddDirectionEffect(Vector2 position, float radius, Vector2 direction)
+    {
+        foreach (KeyValuePair<int, Human> kv in this.humans)
+        {
+            int i = kv.Key;
+            Human human = kv.Value;
+
+            if(Vector2.Distance(human.transform.position, position) <= radius)
+            {
+                human.GoInDirection(direction);
+            }
+        }
     }
 }
 
