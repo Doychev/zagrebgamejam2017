@@ -24,6 +24,8 @@ public class CrowdManager : MonoBehaviour {
     public bool reverseIsland;
     public ObstacleSetup islandObstacle;
 
+    public Vector2[] waypoints;
+
     private float lastVelChange;
 
     public void Awake()
@@ -185,6 +187,14 @@ public class CrowdManager : MonoBehaviour {
         this.islandObstacle = new ObstacleSetup();
         this.islandObstacle.vertices = coll.GetPath(0);
         GameObject.DestroyImmediate(coll);
+    }
+
+    public void OnDrawGizmosSelected()
+    {
+        for(int i = 0; i < this.waypoints.Length; i++)
+        {
+            Gizmos.DrawSphere(this.waypoints[i], 0.2f);
+        }
     }
 }
 
