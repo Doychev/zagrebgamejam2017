@@ -62,7 +62,7 @@ public class CrowdManager : MonoBehaviour {
 
         Simulator.Instance.processObstacles();
 
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 75; i++)
         {
             Vector2 pos = Random.insideUnitCircle * 5;
             Human h = GameObject.Instantiate<Human>(this.humanPrefab, pos, Quaternion.identity);
@@ -160,6 +160,7 @@ public class CrowdManager : MonoBehaviour {
                 {
                     human.Die();
                     Simulator.Instance.setAgentPrefVelocity(i, Vector2.zero);
+                    Simulator.Instance.setAgentPostion(i, new Vector2(10000, 10000));
                     toRemoveIDs.Add(i);
                 }
             }

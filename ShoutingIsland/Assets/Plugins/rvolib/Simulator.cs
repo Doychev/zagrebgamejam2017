@@ -122,6 +122,10 @@ namespace RVO
         {
             return agents_[i].orcaLines_;
         }
+        public void setAgentPostion(int i, Vector2 pos)
+        {
+            this.agents_[i].position_ = pos;
+        }
 
         public int addAgent(Vector2 position)
         {

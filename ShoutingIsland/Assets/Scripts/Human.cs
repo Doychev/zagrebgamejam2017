@@ -26,12 +26,14 @@ public class Human : MonoBehaviour
 
     public void Start()
     {
+        this.walkingType = WalkingType.random;
+        this.transform.position = this.generateDestination();
+
         this.currentWaypoint = (int)Random.Range(0, CrowdManager.Instance.waypoints.Length - 0.001f);
         this.walkingType = this.generateRandomType();
 
         this.directionEffectTimeout += Random.Range(-1f, 2f);
         this.preferedVelocity = Random.insideUnitCircle * 2;
-        this.transform.position = this.generateDestination();
         this.destination = this.generateDestination();
         this.isInDirectionEffect = false;
         this.isDead = false;
@@ -108,7 +110,7 @@ public class Human : MonoBehaviour
 
         if (this.walkingType == WalkingType.random)
         {
-            return rand * 4;
+            return rand * 7;
         }
         else if(this.walkingType == WalkingType.waypointRandom)
         {
