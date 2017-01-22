@@ -95,7 +95,7 @@ public class SignalPoleManager : MonoBehaviour {
     public void OnMouseDrag()
     {
         Vector2 vec = Camera.main.ScreenToWorldPoint(Input.mousePosition) - this.transform.position;
-        Vector3 directionAngle = new Vector3(0, 0, Mathf.Rad2Deg * Mathf.Atan2(vec.y, vec.x));
+        Vector3 directionAngle = new Vector3(0, 0, Mathf.Rad2Deg * Mathf.Atan2(vec.y, vec.x) - 90);
         Debug.Log(directionAngle);
 
         this.head.transform.eulerAngles = directionAngle;

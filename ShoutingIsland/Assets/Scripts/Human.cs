@@ -72,7 +72,7 @@ public class Human : MonoBehaviour
         this.preferedVelocity = Vector3.SmoothDamp(this.preferedVelocity, goalVector, ref this.interpolationVel, 0.3f);
 
         this.transform.position = this.currentPosition;
-        this.transform.rotation = Quaternion.Euler(0, 0, Mathf.Rad2Deg * Mathf.Atan2(this.currentVelocity.y, this.currentVelocity.x));
+        //this.transform.rotation = Quaternion.Euler(0, 0, Mathf.Rad2Deg * Mathf.Atan2(this.currentVelocity.y, this.currentVelocity.x));
     }
 
     public void GoInDirection(Vector2 direction)
@@ -84,8 +84,7 @@ public class Human : MonoBehaviour
 
     public void Die()
     {
-        this.isDead = true;
-        GetComponent<SpriteRenderer>().color = Color.blue;
+        GameObject.Destroy(this.gameObject);
     }
 
     private Vector2 generateDestination()
