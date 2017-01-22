@@ -108,7 +108,8 @@ public class CrowdManager : MonoBehaviour {
             int i = kv.Key;
             Human human = kv.Value;
 
-            human.transform.position = Simulator.Instance.getAgentPosition(i);
+            human.currentPosition = Simulator.Instance.getAgentPosition(i);
+            human.currentVelocity = Simulator.Instance.getAgentVelocity(i);
 
             human.DoYourShit();
             
