@@ -259,8 +259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89ab7109ad0980b4089464ed8ea7b5c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveWaitTime: 5
-  warningShowTime: 2
+  warningShowTime: 1
   waveForce: 5
   warningPrefab: {fileID: 1279239309657106, guid: ee60e37e35657dd4fb8528794c4acb3d,
     type: 2}

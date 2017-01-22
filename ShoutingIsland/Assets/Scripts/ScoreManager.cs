@@ -16,7 +16,7 @@ public class ScoreManager : MonoBehaviour {
 
     private bool gameStarted = false;
 
-    private float timeLeft = 10.0f;
+    private float timeLeft = 120.0f;
 
 
     private float currentScore = 0;
@@ -83,11 +83,7 @@ public class ScoreManager : MonoBehaviour {
             scoreText.text = "Score: " + currentScore;
             peopleText.text = "Alive: " + livingPeople;
 
-            if (livingPeople > 0)
-            {
-                //TsunamiManager.Instance.IncreaseDifficulty();
-            }
-            else
+            if (livingPeople == 0)
             {
                 StartCoroutine(EndGame());
             }
