@@ -11,7 +11,7 @@ public class ScoreManager : MonoBehaviour {
         private set;
     }
 
-    public Text scoreText, peopleText, timerText;
+    public Text peopleText, timerText;
     public GameObject gameOverPanel;
 
     private bool gameStarted = false;
@@ -80,7 +80,7 @@ public class ScoreManager : MonoBehaviour {
         {
             livingPeople = CrowdManager.Instance.CountLivingHumans();
             currentScore += livingPeople;
-            scoreText.text = "Score: " + currentScore;
+            //scoreText.text = "Score: " + currentScore;
             peopleText.text = "Alive: " + livingPeople;
 
             if (livingPeople == 0)

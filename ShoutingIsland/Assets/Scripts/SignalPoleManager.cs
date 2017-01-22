@@ -96,7 +96,6 @@ public class SignalPoleManager : MonoBehaviour {
     {
         Vector2 vec = Camera.main.ScreenToWorldPoint(Input.mousePosition) - this.transform.position;
         Vector3 directionAngle = new Vector3(0, 0, Mathf.Rad2Deg * Mathf.Atan2(vec.y, vec.x) - 90);
-        Debug.Log(directionAngle);
 
         this.head.transform.eulerAngles = directionAngle;
     }
@@ -114,7 +113,7 @@ public class SignalPoleManager : MonoBehaviour {
     {
         ScoreManager.Instance.startGame();
 
-        this.head.GetComponent<SpriteRenderer>().color = Color.green;
+        //this.head.GetComponent<SpriteRenderer>().color = Color.green;
         float signalTimerStart = Time.time;
 
         while (Time.time - signalTimerStart < 8f)
@@ -122,7 +121,7 @@ public class SignalPoleManager : MonoBehaviour {
             this.SendSignal();
             yield return new WaitForSeconds(2.5f);
         }
-        this.head.GetComponent<SpriteRenderer>().color = Color.white;
+        //this.head.GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     private void SendSignal()
