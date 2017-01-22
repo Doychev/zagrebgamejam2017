@@ -8,6 +8,8 @@ public class Human : MonoBehaviour
     public Vector2 preferedVelocity;
     [HideInInspector]
     public bool isDead;
+    [HideInInspector]
+    public Vector2 currentVelocity, currentPosition;
 
     private float speed, effectSpeed;
     
@@ -46,12 +48,12 @@ public class Human : MonoBehaviour
 
         if (this.isInDirectionEffect)
         {
-            if(Time.time - this.directionEffectStartTime > this.directionEffectTimeout)
+            if (Time.time - this.directionEffectStartTime > this.directionEffectTimeout)
             {
                 this.isInDirectionEffect = false;
                 this.destination = this.generateDestination();
             }
-            
+
             goalVector = this.directionEffectVector;
         }
         else
@@ -66,6 +68,9 @@ public class Human : MonoBehaviour
         }
 
         this.preferedVelocity = Vector3.SmoothDamp(this.preferedVelocity, goalVector, ref this.interpolationVel, 0.3f);
+
+        this.transform.position = this.currentPosition;
+        this.transform.rotation = Quaternion.Euler(0, 0, Mathf.Rad2Deg * Mathf.Atan2(this.currentVelocity.y, this.currentVelocity.x));
     }
 
     public void GoInDirection(Vector2 direction)
