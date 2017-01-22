@@ -14,25 +14,33 @@ public class ScoreManager : MonoBehaviour {
     public Text scoreText, peopleText;
     public GameObject gameOverPanel;
 
-    private int currentScore = 0;
+    private float currentScore = 0;
 
 	void Awake () {
         ScoreManager.Instance = this;
     }
-	
-    public void UpdateScore()
-    {
-        int livingPeople = CrowdManager.Instance.CountLivingHumans();
-        currentScore += livingPeople;
-        scoreText.text = "Score: " + currentScore;
-        peopleText.text = "Alive: " + livingPeople;
 
-        if (livingPeople > 0)
+    public IEnumerator UpdateScore()
+    {
+        yield return new WaitForSeconds(1.0f);
+        int livingPeople = CrowdManager.Instance.CountLivingHumans();
+        while (livingPeople > 0)
         {
-            TsunamiManager.Instance.IncreaseDifficulty();
-        } else
-        {
-            StartCoroutine(EndGame());
+            livingPeople = CrowdManager.Instance.CountLivingHumans();
+            currentScore += livingPeople;
+            scoreText.text = "Score: " + currentScore;
+            peopleText.text = "Alive: " + livingPeople;
+
+            if (livingPeople > 0)
+            {
+                //TsunamiManager.Instance.IncreaseDifficulty();
+            }
+            else
+            {
+                StartCoroutine(EndGame());
+            }
+
+            yield return new WaitForSeconds(0.5f);
         }
     }
 

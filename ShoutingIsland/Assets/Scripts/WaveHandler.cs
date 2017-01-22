@@ -31,6 +31,5 @@ public class WaveHandler : MonoBehaviour {
         }
 
         Destroy(gameObject);
-        ScoreManager.Instance.UpdateScore();
     }
 }

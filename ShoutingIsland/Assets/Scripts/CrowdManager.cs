@@ -67,6 +67,8 @@ public class CrowdManager : MonoBehaviour {
             Vector2 pos = Random.insideUnitCircle * 5;
             Human h = GameObject.Instantiate<Human>(this.humanPrefab, pos, Quaternion.identity);
         }
+
+        StartCoroutine(ScoreManager.Instance.UpdateScore());
     }
 
     public void FixedUpdate()
