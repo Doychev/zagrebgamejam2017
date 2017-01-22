@@ -11,28 +11,88 @@ public class ScoreManager : MonoBehaviour {
         private set;
     }
 
-    public Text scoreText, peopleText;
+    public Text scoreText, peopleText, timerText;
     public GameObject gameOverPanel;
 
-    private int currentScore = 0;
+    private bool gameStarted = false;
+
+    private float timeLeft = 10.0f;
+
+
+    private float currentScore = 0;
 
 	void Awake () {
         ScoreManager.Instance = this;
     }
-	
-    public void UpdateScore()
-    {
-        int livingPeople = CrowdManager.Instance.CountLivingHumans();
-        currentScore += livingPeople;
-        scoreText.text = "Score: " + currentScore;
-        peopleText.text = "Alive: " + livingPeople;
 
-        if (livingPeople > 0)
+    public void startGame()
+    {
+        if (!gameStarted)
         {
-            TsunamiManager.Instance.IncreaseDifficulty();
-        } else
+            gameStarted = true;
+            StartCoroutine(UpdateScore());
+            StartCoroutine(TsunamiManager.Instance.LaunchWave());
+        }
+    }
+
+    void Update()
+    {
+        if (gameStarted)
         {
-            StartCoroutine(EndGame());
+            timeLeft -= Time.deltaTime;
+            timerText.text = getTimerString(timeLeft);
+            if (timeLeft < 0)
+            {
+                StartCoroutine(EndGame());
+                gameStarted = false;
+            }
+        }
+    }
+
+    private string getTimerString(float time)
+    {
+        string result = "";
+        if (time < 0)
+        {
+            result = "0:00";
+        }
+        else
+        {
+            int minutes = (int)time / 60;
+            int seconds = (int)time - minutes * 60;
+            if (seconds > 9)
+            {
+                result = minutes + ":" + seconds;
+            }
+            else
+            {
+                result = minutes + ":0" + seconds;
+            }
+        }
+        return result;
+    }
+
+    public IEnumerator UpdateScore()
+    {
+        yield return new WaitForSeconds(1.0f);
+        int livingPeople = CrowdManager.Instance.CountLivingHumans();
+        while (livingPeople > 0)
+        {
+            livingPeople = CrowdManager.Instance.CountLivingHumans();
+            currentScore += livingPeople;
+            scoreText.text = "Score: " + currentScore;
+            peopleText.text = "Alive: " + livingPeople;
+
+            if (livingPeople > 0)
+            {
+                //TsunamiManager.Instance.IncreaseDifficulty();
+            }
+            else
+            {
+                StartCoroutine(EndGame());
+            }
+
+            yield return new WaitForSeconds(0.5f);
         }
     }
 
@@ -57,7 +117,7 @@ public class ScoreManager : MonoBehaviour {
     public void Restart()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("PlaygroundScene");
+        SceneManager.LoadScene("PlaygroundSceneWithSound");
     }
 
     public static IEnumerator WaitForRealTime(float delay)

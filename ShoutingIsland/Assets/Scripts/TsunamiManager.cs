@@ -19,11 +19,7 @@ public class TsunamiManager : MonoBehaviour {
         TsunamiManager.Instance = this;
     }
 
-    void Start () {
-        StartCoroutine(LaunchWave());
-    }
-
-    IEnumerator LaunchWave()
+    public IEnumerator LaunchWave()
     {
         while (true)
         {
@@ -77,11 +73,7 @@ public class TsunamiManager : MonoBehaviour {
 
     public void IncreaseDifficulty()
     {
-        Debug.Log("waveWaitTime before: " + waveWaitTime);
-        Debug.Log("warningShowTime before: " + warningShowTime);
         waveWaitTime -= waveWaitTime / 25;
         warningShowTime -= warningShowTime / 25;
-        Debug.Log("waveWaitTime after: " + waveWaitTime);
-        Debug.Log("warningShowTime after: " + warningShowTime);
     }
 }

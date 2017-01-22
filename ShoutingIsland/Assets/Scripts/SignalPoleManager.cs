@@ -109,6 +109,8 @@ public class SignalPoleManager : MonoBehaviour {
 
     IEnumerator SignalGenerator()
     {
+        ScoreManager.Instance.startGame();
+
         GetComponent<SpriteRenderer>().color = Color.green;
         float signalTimerStart = Time.time;
 
