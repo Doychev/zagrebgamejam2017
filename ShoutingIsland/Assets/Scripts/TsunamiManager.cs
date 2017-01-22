@@ -19,11 +19,7 @@ public class TsunamiManager : MonoBehaviour {
         TsunamiManager.Instance = this;
     }
 
-    void Start () {
-        StartCoroutine(LaunchWave());
-    }
-
-    IEnumerator LaunchWave()
+    public IEnumerator LaunchWave()
     {
         while (true)
         {

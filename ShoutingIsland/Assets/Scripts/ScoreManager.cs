@@ -11,13 +11,65 @@ public class ScoreManager : MonoBehaviour {
         private set;
     }
 
-    public Text scoreText, peopleText;
+    public Text scoreText, peopleText, timerText;
     public GameObject gameOverPanel;
+
+    private bool gameStarted = false;
+
+    private float timeLeft = 10.0f;
+
 
     private float currentScore = 0;
 
 	void Awake () {
         ScoreManager.Instance = this;
+    }
+
+    public void startGame()
+    {
+        if (!gameStarted)
+        {
+            gameStarted = true;
+            StartCoroutine(UpdateScore());
+            StartCoroutine(TsunamiManager.Instance.LaunchWave());
+        }
+    }
+
+    void Update()
+    {
+        if (gameStarted)
+        {
+            timeLeft -= Time.deltaTime;
+            timerText.text = getTimerString(timeLeft);
+            if (timeLeft < 0)
+            {
+                StartCoroutine(EndGame());
+                gameStarted = false;
+            }
+        }
+    }
+
+    private string getTimerString(float time)
+    {
+        string result = "";
+        if (time < 0)
+        {
+            result = "0:00";
+        }
+        else
+        {
+            int minutes = (int)time / 60;
+            int seconds = (int)time - minutes * 60;
+            if (seconds > 9)
+            {
+                result = minutes + ":" + seconds;
+            }
+            else
+            {
+                result = minutes + ":0" + seconds;
+            }
+        }
+        return result;
     }
 
     public IEnumerator UpdateScore()
@@ -65,7 +117,7 @@ public class ScoreManager : MonoBehaviour {
     public void Restart()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("PlaygroundScene");
+        SceneManager.LoadScene("PlaygroundSceneWithSound");
     }
 
     public static IEnumerator WaitForRealTime(float delay)
