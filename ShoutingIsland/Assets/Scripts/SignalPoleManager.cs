@@ -5,7 +5,9 @@ using UnityEngine;
 public class SignalPoleManager : MonoBehaviour {
 
     public GameObject radiusVisualization;
-    public GameObject arrowVisualisation;
+    public GameObject head;
+
+    public SignalAnimator signalIndicator;
 
     public float radius;
     
@@ -32,7 +34,7 @@ public class SignalPoleManager : MonoBehaviour {
     {
         set
         {
-            this.arrowVisualisation.SetActive(value);
+            this.signalIndicator.gameObject.SetActive(value);
             this._isDragging = value;
         }
         get
@@ -73,14 +75,6 @@ public class SignalPoleManager : MonoBehaviour {
                 this.timeStart = Time.time;
             }
         }
-
-        if(this.isDragging)
-        {
-            this.arrowVisualisation.transform.position = this.transform.position;
-            Vector3 diff = this.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            float angle = Mathf.Rad2Deg * Mathf.Atan2(diff.y, diff.x);
-            this.arrowVisualisation.transform.eulerAngles = new Vector3(0, 0, angle + 90);
-        }
     }
 
     void OnMouseEnter()
@@ -98,6 +92,15 @@ public class SignalPoleManager : MonoBehaviour {
         this.isDragging = true;
     }
 
+    public void OnMouseDrag()
+    {
+        Vector2 vec = Camera.main.ScreenToWorldPoint(Input.mousePosition) - this.transform.position;
+        Vector3 directionAngle = new Vector3(0, 0, Mathf.Rad2Deg * Mathf.Atan2(vec.y, vec.x));
+        Debug.Log(directionAngle);
+
+        this.head.transform.eulerAngles = directionAngle;
+    }
+
     void OnMouseUp()
     {
         this.isDragging = false;
@@ -111,7 +114,7 @@ public class SignalPoleManager : MonoBehaviour {
     {
         ScoreManager.Instance.startGame();
 
-        GetComponent<SpriteRenderer>().color = Color.green;
+        this.head.GetComponent<SpriteRenderer>().color = Color.green;
         float signalTimerStart = Time.time;
 
         while (Time.time - signalTimerStart < 8f)
@@ -119,7 +122,7 @@ public class SignalPoleManager : MonoBehaviour {
             this.SendSignal();
             yield return new WaitForSeconds(2.5f);
         }
-        GetComponent<SpriteRenderer>().color = Color.white;
+        this.head.GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     private void SendSignal()
@@ -128,6 +131,8 @@ public class SignalPoleManager : MonoBehaviour {
         {
             this.audioSource.Play();
         }
+
+        // TODO: start signalanimator animation
 
         CrowdManager.Instance.AddDirectionEffect(transform.position, this.radius, signalVector);
     }
