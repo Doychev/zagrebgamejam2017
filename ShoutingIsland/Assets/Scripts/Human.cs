@@ -145,15 +145,15 @@ public class Human : MonoBehaviour
     {
         float chance = Random.value;
 
-        if(chance < 0.1f)
+        if(chance < 0.07f)
         {
             return WalkingType.random;
         }
-        else if(chance < 0.3f)
+        else if(chance < 0.2f)
         {
             return WalkingType.waypointRandom;
         }
-        else if(chance < 0.65f)
+        else if(chance < 0.6f)
         {
             return WalkingType.waypoint;
         }
