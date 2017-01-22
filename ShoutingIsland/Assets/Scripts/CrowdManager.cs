@@ -61,7 +61,7 @@ public class CrowdManager : MonoBehaviour {
         }
 
         Simulator.Instance.processObstacles();
-
+        
         for (int i = 0; i < 75; i++)
         {
             Vector2 pos = Random.insideUnitCircle * 5;
